@@ -9,12 +9,12 @@ import {
   Typography,
   AppBar,
   Toolbar,
-  useTheme,
-  useMediaQuery,
   CircularProgress,
   Chip,
   Avatar
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import {
   useDeleteDoctorMutation,

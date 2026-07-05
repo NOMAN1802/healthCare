@@ -56,14 +56,14 @@ const WhyUs = () => {
                 backgroundColor: "rgba(245, 245, 245,1)",
                 padding: "15px",
                 alignItems: "center",
-                borderRadius: "10px 10px 100px 10px",
+                borderRadius: "4px",
               }}
             >
               <Box
                 sx={{
                   backgroundColor: "#fff",
                   padding: "15px",
-                  borderRadius: "10px",
+                  borderRadius: "4px",
                 }}
               >
                 <Image src={servicesData[0].imageSrc} width={50} alt="award" />
@@ -89,7 +89,7 @@ const WhyUs = () => {
                 backgroundColor: "rgba(245, 245, 245,1)",
                 padding: "15px",
                 alignItems: "center",
-                borderRadius: "10px 100px 10px 10px",
+                borderRadius: "4px",
                 margin: "20px 0px",
               }}
             >
@@ -97,7 +97,7 @@ const WhyUs = () => {
                 sx={{
                   backgroundColor: "#fff",
                   padding: "10px",
-                  borderRadius: "10px",
+                  borderRadius: "4px",
                 }}
               >
                 <Image src={servicesData[1].imageSrc} width={50} alt="award" />
@@ -118,14 +118,14 @@ const WhyUs = () => {
                 backgroundColor: "rgba(245, 245, 245,1)",
                 padding: "15px",
                 alignItems: "center",
-                borderRadius: "10px 10px 100px 10px",
+                borderRadius: "4px",
               }}
             >
               <Box
                 sx={{
                   backgroundColor: "#fff",
                   padding: "10px",
-                  borderRadius: "10px",
+                  borderRadius: "4px",
                 }}
               >
                 <Image src={servicesData[2].imageSrc} width={50} alt="award" />
@@ -146,7 +146,7 @@ const WhyUs = () => {
                 backgroundColor: "rgba(245, 245, 245,1)",
                 padding: "15px",
                 alignItems: "center",
-                borderRadius: "10px 100px 10px 10px",
+                borderRadius: "4px",
                 marginTop: "20px",
               }}
             >
@@ -154,7 +154,7 @@ const WhyUs = () => {
                 sx={{
                   backgroundColor: "#fff",
                   padding: "10px",
-                  borderRadius: "10px",
+                  borderRadius: "4px",
                 }}
               >
                 <Image src={servicesData[3].imageSrc} width={50} alt="award" />

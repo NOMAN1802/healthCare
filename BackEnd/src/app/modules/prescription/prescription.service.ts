@@ -6,6 +6,8 @@ import ApiError from "../../errors/ApiError";
 import { IAuthUser } from "../../interfaces/common";
 import { IPagination } from "../../interfaces/paginationInterface";
 import { paginationHelper } from "../../../helpers/paginationHelper";
+import sendEmail from "../../../helpers/emailHelper";
+import { prescriptionIssuedTemplate } from "../../../helpers/appointmentEmailTemplates";
 
 const createIntoDB = async (user: IAuthUser, payload: any) => {
   const appointmentData = await prisma.appointment.findUniqueOrThrow({
@@ -38,9 +40,22 @@ const createIntoDB = async (user: IAuthUser, payload: any) => {
       include: {
         doctor: true,
         patient: true,
-        appointment: true,
+        appointment: {
+          include: { schedule: true },
+        },
       },
     });
+
+    // Send prescription email to patient (fire-and-forget)
+    const tmpl = prescriptionIssuedTemplate({
+      patientName: result.patient.name,
+      doctorName: result.doctor.name,
+      doctorDesignation: result.doctor.designation,
+      appointmentDate: result.appointment.schedule.startDateTime.toISOString(),
+      instructions: result.instructions,
+      followUpDate: result.followUpDate?.toISOString() ?? null,
+    });
+    sendEmail({ to: result.patient.email, ...tmpl }).catch(() => {});
 
     return result;
   }

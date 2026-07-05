@@ -218,10 +218,35 @@ const softDeleteFromDB = async (id: string) => {
   return result;
 };
 
+const updateMyHealthData = async (
+  userEmail: string,
+  payload: Partial<PatientHealthData>
+) => {
+  const patient = await prisma.patient.findUniqueOrThrow({
+    where: { email: userEmail, isDeleted: false },
+  });
+
+  const result = await prisma.patientHealthData.upsert({
+    where: { patientId: patient.id },
+    update: payload,
+    create: {
+      patientId: patient.id,
+      gender: "MALE",
+      bloodGroup: "A_POSITIVE",
+      height: "",
+      weight: "",
+      ...payload,
+    },
+  });
+
+  return result;
+};
+
 export const patientServices = {
   getAllFromDB,
   getByIdFromDB,
   updateIntoDB,
   deleteFromDB,
   softDeleteFromDB,
+  updateMyHealthData,
 };

@@ -8,7 +8,7 @@ const Stats = () => {
       <Box
         sx={{
           backgroundImage: "linear-gradient(45deg,blue, cyan)",
-          borderRadius: "20px",
+          borderRadius: "4px",
           margin: "50px auto",
         }}
       >

@@ -52,7 +52,7 @@ const VideoCall = ({ videoCallingId }: { videoCallingId: string }) => {
          <Button
             onClick={() => setStartVideoCall(true)}
             endIcon={<VideoCallIcon />}
-            sx={{ borderRadius: '20px' }}
+            sx={{ borderRadius: '4px' }}
          >
             Start Call
          </Button>

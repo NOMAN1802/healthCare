@@ -9,8 +9,6 @@ import {
   Typography,
   IconButton,
   CircularProgress,
-  useTheme,
-  useMediaQuery,
   Box,
   Stack,
   Chip,
@@ -20,6 +18,8 @@ import {
   FormControl,
   Select,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import { Gender } from "@/types/common";
 import { FieldValues } from "react-hook-form";
@@ -117,7 +117,7 @@ const DoctorModal = ({ open, setOpen }: TProps) => {
       fullScreen={isMobile}
       maxWidth="md"
       fullWidth
-      PaperProps={{ sx: { borderRadius: isMobile ? 0 : 2 } }}
+      PaperProps={{ sx: { borderRadius: isMobile ? 0 : 1 } }}
     >
       <DialogTitle
         sx={{
@@ -149,7 +149,7 @@ const DoctorModal = ({ open, setOpen }: TProps) => {
                 sx={{
                   border: "2px dashed",
                   borderColor: selectedFile ? "primary.main" : "divider",
-                  borderRadius: 2, p: 2, textAlign: "center", cursor: "pointer",
+                  borderRadius: 1, p: 2, textAlign: "center", cursor: "pointer",
                   transition: "all 0.2s",
                   "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
                 }}

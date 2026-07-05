@@ -52,7 +52,7 @@ const SideCard = ({ title, children }: { title: string; children: React.ReactNod
     elevation={0}
     sx={{
       p: 3,
-      borderRadius: 3,
+      borderRadius: 1,
       border: '1px solid',
       borderColor: 'divider',
       bgcolor: 'background.paper',
@@ -68,7 +68,7 @@ const SideCard = ({ title, children }: { title: string; children: React.ReactNod
 const LoadingSkeleton = () => (
   <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
     <Box display="flex" gap={3} mb={4} flexDirection={{ xs: 'column', md: 'row' }}>
-      <Skeleton variant="rectangular" width={200} height={220} sx={{ borderRadius: 3, flexShrink: 0 }} />
+      <Skeleton variant="rectangular" width={200} height={220} sx={{ borderRadius: 1, flexShrink: 0 }} />
       <Box flexGrow={1}>
         <Skeleton variant="text" height={50} width="70%" />
         <Skeleton variant="text" height={28} width="40%" />
@@ -81,12 +81,12 @@ const LoadingSkeleton = () => (
     </Box>
     <Grid container spacing={3}>
       <Grid item xs={12} md={8}>
-        <Skeleton variant="rectangular" height={160} sx={{ borderRadius: 3, mb: 3 }} />
-        <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 3 }} />
+        <Skeleton variant="rectangular" height={160} sx={{ borderRadius: 1, mb: 3 }} />
+        <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 1 }} />
       </Grid>
       <Grid item xs={12} md={4}>
-        <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 3, mb: 2 }} />
-        <Skeleton variant="rectangular" height={100} sx={{ borderRadius: 3 }} />
+        <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 1, mb: 2 }} />
+        <Skeleton variant="rectangular" height={100} sx={{ borderRadius: 1 }} />
       </Grid>
     </Grid>
   </Container>
@@ -126,7 +126,7 @@ const DoctorProfile = ({ params }: PropType) => {
         <Paper
           elevation={0}
           sx={{
-            borderRadius: 4,
+            borderRadius: 1,
             border: '1px solid',
             borderColor: 'divider',
             overflow: 'hidden',
@@ -150,7 +150,7 @@ const DoctorProfile = ({ params }: PropType) => {
                 width: { xs: 130, sm: 160, md: 180 },
                 height: { xs: 130, sm: 160, md: 180 },
                 flexShrink: 0,
-                borderRadius: 3,
+                borderRadius: 1,
                 overflow: 'hidden',
                 border: '4px solid white',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
@@ -211,7 +211,7 @@ const DoctorProfile = ({ params }: PropType) => {
                       label={ds?.specialties?.title ?? '—'}
                       color="primary"
                       size="small"
-                      sx={{ fontWeight: 600, borderRadius: 2 }}
+                      sx={{ fontWeight: 600, borderRadius: 1 }}
                     />
                   ))}
                 </Box>
@@ -225,7 +225,7 @@ const DoctorProfile = ({ params }: PropType) => {
                 flexShrink: 0,
                 bgcolor: 'primary.main',
                 color: 'white',
-                borderRadius: 3,
+                borderRadius: 1,
                 px: { xs: 3, md: 4 },
                 py: 2,
                 minWidth: 120,
@@ -292,7 +292,7 @@ const DoctorProfile = ({ params }: PropType) => {
               {/* About */}
               <Paper
                 elevation={0}
-                sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}
+                sx={{ p: { xs: 3, md: 4 }, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}
               >
                 <Typography variant="h6" fontWeight={700} mb={2}>
                   About {doctor.name.split(' ')[0]}
@@ -311,7 +311,7 @@ const DoctorProfile = ({ params }: PropType) => {
               {/* Professional Details */}
               <Paper
                 elevation={0}
-                sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}
+                sx={{ p: { xs: 3, md: 4 }, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}
               >
                 <Typography variant="h6" fontWeight={700} mb={2}>
                   Professional Details
@@ -368,7 +368,7 @@ const DoctorProfile = ({ params }: PropType) => {
               {/* Availability */}
               <Paper
                 elevation={0}
-                sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}
+                sx={{ p: { xs: 3, md: 4 }, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}
               >
                 <DoctorScheduleSlots id={doctor.id} />
               </Paper>
@@ -389,7 +389,7 @@ const DoctorProfile = ({ params }: PropType) => {
                         color="primary"
                         variant="outlined"
                         size="small"
-                        sx={{ borderRadius: 2, fontWeight: 600 }}
+                        sx={{ borderRadius: 1, fontWeight: 600 }}
                       />
                     ))}
                   </Box>
@@ -436,7 +436,7 @@ const DoctorProfile = ({ params }: PropType) => {
                     py: 2,
                     px: 3,
                     bgcolor: 'primary.main',
-                    borderRadius: 2,
+                    borderRadius: 1,
                     color: 'white',
                   }}
                 >

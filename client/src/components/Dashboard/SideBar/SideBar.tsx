@@ -56,7 +56,7 @@ const SideBar = () => {
           sx={{
             width: 48,
             height: 48,
-            borderRadius: "12px",
+            borderRadius: "4px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

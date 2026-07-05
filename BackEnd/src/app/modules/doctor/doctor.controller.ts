@@ -2,14 +2,14 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import pick from "../../../shared/pick";
 import { sendResponse } from "../../../helpers/sendResponse";
 import { catchAsync } from "../../../helpers/catchAsync";
-import { doctorService } from "./doctor.service";
+import { doctorServices } from "./doctor.service";
 import { doctorFilterAbleSearchFields } from "./doctor.constant";
 
 const getAllFromDB: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const query = pick(req.query, doctorFilterAbleSearchFields);
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
-    const result = await doctorService.getAllFromDB(query, options);
+    const result = await doctorServices.getAllFromDB(query, options);
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -22,7 +22,7 @@ const getAllFromDB: RequestHandler = catchAsync(
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await doctorService.getByIdFromDB(id);
+  const result = await doctorServices.getByIdFromDB(id);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -33,7 +33,7 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
 
 const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await doctorService.deleteFromDB(id);
+  const result = await doctorServices.deleteFromDB(id);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -44,7 +44,7 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
 
 const softDeleteFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await doctorService.softDeleteFromDB(id);
+  const result = await doctorServices.softDeleteFromDB(id);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -56,7 +56,7 @@ const softDeleteFromDB = catchAsync(async (req: Request, res: Response) => {
 const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const data = req.body;
-  const result = await doctorService.updateIntoDB(id, data);
+  const result = await doctorServices.updateIntoDB(id, data);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -64,7 +64,7 @@ const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-export const doctorController = {
+export const doctorControllers = {
   getAllFromDB,
   getByIdFromDB,
   updateIntoDB,

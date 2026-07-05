@@ -1,12 +1,12 @@
 import express from "express";
-import { authController } from "./auth.controller";
+import { authControllers } from "./auth.controller";
 import { authValidation } from "../../middlewares/authValidation";
 import { UserRole } from "../../../generated/prisma";
 
 const router = express.Router();
 
-router.post("/login", authController.loginUser);
-router.post("/refresh-token", authController.refreshToken);
+router.post("/login", authControllers.loginUser);
+router.post("/refresh-token", authControllers.refreshToken);
 router.post(
   "/change-password",
   authValidation(
@@ -15,11 +15,11 @@ router.post(
     UserRole.PATIENT,
     UserRole.DOCTOR
   ),
-  authController.changePassword
+  authControllers.changePassword
 );
 
-router.post("/forgot-password", authController.forgotPassword);
+router.post("/forgot-password", authControllers.forgotPassword);
 
-router.post("/reset-password", authController.resetPassword);
+router.post("/reset-password", authControllers.resetPassword);
 
 export const AuthRoutes = router;

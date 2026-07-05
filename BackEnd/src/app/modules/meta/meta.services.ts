@@ -53,30 +53,63 @@ const getSuperAdminMetaData = async () => {
   };
 };
 const getAdminMetaData = async () => {
-  // const barChartData = await getBarChartData();
-  // const pieChartData = await getPieChartData();
   const appointmentCount = await prisma.appointment.count();
   const patientCoount = await prisma.patient.count();
   const doctorCount = await prisma.doctor.count();
   const paymentCount = await prisma.payment.count();
 
   const totalRevenue = await prisma.payment.aggregate({
-    _sum: {
-      amount: true,
-    },
-    where: {
-      status: PaymentStatus.PAID,
-    },
+    _sum: { amount: true },
+    where: { status: PaymentStatus.PAID },
   });
+
+  const recentAppointments = await prisma.appointment.findMany({
+    take: 5,
+    orderBy: { createdAt: "desc" },
+    include: { patient: true },
+  });
+
+  const recentPayments = await prisma.payment.findMany({
+    take: 5,
+    orderBy: { createdAt: "desc" },
+    where: { status: PaymentStatus.PAID },
+    include: { appointment: { include: { patient: true } } },
+  });
+
+  const actionLabel: Record<string, string> = {
+    SCHEDULED: "Appointment scheduled",
+    INPROGRESS: "Appointment in progress",
+    COMPLETED: "Appointment completed",
+    CANCELLED: "Appointment cancelled",
+  };
+
+  const appointmentActivities = recentAppointments.map((a) => ({
+    id: a.id,
+    action: actionLabel[a.status] ?? "Appointment updated",
+    user: a.patient.name,
+    createdAt: a.createdAt,
+    activityStatus: a.status,
+  }));
+
+  const paymentActivities = recentPayments.map((p) => ({
+    id: p.id,
+    action: "Payment processed",
+    user: p.appointment.patient.name,
+    createdAt: p.createdAt,
+    activityStatus: "PAID",
+  }));
+
+  const recentActivities = [...appointmentActivities, ...paymentActivities]
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .slice(0, 6);
 
   return {
     appointmentCount,
     patientCoount,
     doctorCount,
     paymentCount,
-    // barChartData,
-    // pieChartData,
     totalRevenue,
+    recentActivities,
   };
 };
 const getDoctorMetaData = async (user: IAuthUser) => {
@@ -203,6 +236,6 @@ const getPatientMetaData = async (user: IAuthUser) => {
 
 //   return formattedAppointmentStatusDistribution;
 // };
-export const MetaServices = {
+export const metaServices = {
   fetcheDashboardMetaData,
 };

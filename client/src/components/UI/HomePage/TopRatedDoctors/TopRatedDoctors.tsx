@@ -22,7 +22,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
     <Box
       sx={{
         bgcolor: "white",
-        borderRadius: 3,
+        borderRadius: 1,
         overflow: "hidden",
         boxShadow: "0 2px 16px rgba(0,0,0,0.08)",
         transition: "all 0.3s ease",
@@ -64,7 +64,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
               color: "white",
               px: 1.5,
               py: 0.5,
-              borderRadius: 2,
+              borderRadius: 1,
               fontSize: "0.75rem",
               fontWeight: 700,
               lineHeight: 1.4,
@@ -173,7 +173,6 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
             variant="contained"
             fullWidth
             sx={{
-              borderRadius: 2,
               textTransform: "none",
               fontWeight: 700,
               py: 1.1,
@@ -188,7 +187,6 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
             variant="outlined"
             fullWidth
             sx={{
-              borderRadius: 2,
               textTransform: "none",
               fontWeight: 600,
               py: 1,
@@ -280,7 +278,6 @@ const TopRatedDoctors = async () => {
             variant="contained"
             size="large"
             sx={{
-              borderRadius: 3,
               textTransform: "none",
               fontWeight: 700,
               px: 5,

@@ -43,7 +43,7 @@ const Specialist = async () => {
                 minWidth: "120px",
                 backgroundColor: "rgba(245, 245, 245, 1)",
                 border: "1px solid rgba(250, 250, 250, 1)",
-                borderRadius: "10px",
+                borderRadius: "4px",
                 textAlign: "center",
                 padding: "40px 10px",
                 textDecoration: "none",

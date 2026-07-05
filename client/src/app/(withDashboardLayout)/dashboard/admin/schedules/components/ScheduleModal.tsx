@@ -18,21 +18,21 @@ const ScheduleModal = ({ open, setOpen }: TProps) => {
   const [createSchedule] = useCreateScheduleMutation();
 
   const handleFormSubmit = async (values: FieldValues) => {
-    // console.log(values);
     values.startDate = dateFormatter(values.startDate);
     values.endDate = dateFormatter(values.endDate);
     values.startTime = timeFormatter(values.startTime);
     values.endTime = timeFormatter(values.endTime);
-    // console.log(values);
+
     try {
       const res = await createSchedule(values).unwrap();
-      // console.log(res);
-      if (res?.length) {
-        toast.success("Schedules created successfully!");
-        setOpen(false);
+      if (Array.isArray(res) && res.length > 0) {
+        toast.success(`${res.length} schedule slot(s) created successfully!`);
+      } else {
+        toast.info("No new slots created — all slots in this range already exist.");
       }
+      setOpen(false);
     } catch (err: any) {
-      console.error(err.message);
+      toast.error(err?.data?.message ?? "Failed to create schedules");
     }
   };
 

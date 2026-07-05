@@ -4,14 +4,14 @@ import { IAuthUser } from "../../interfaces/common";
 import pick from "../../../shared/pick";
 import { appointmentFilterableFields } from "./appointment.constant";
 import { catchAsync } from "../../../helpers/catchAsync";
-import { AppointmentService } from "./appointment.service";
+import { appointmentServices } from "./appointment.service";
 import { sendResponse } from "../../../helpers/sendResponse";
 
 const createAppointment = catchAsync(async (req: Request & { user?: IAuthUser }, res: Response) => {
 
     const user = req.user;
 
-    const result = await AppointmentService.createAppointment(user as IAuthUser, req.body);
+    const result = await appointmentServices.createAppointment(user as IAuthUser, req.body);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -26,7 +26,7 @@ const getMyAppointment = catchAsync(async (req: Request & { user?: IAuthUser }, 
     const filters = pick(req.query, ['status', 'paymentStatus']);
     const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
 
-    const result = await AppointmentService.getMyAppointment(user as IAuthUser, filters, options);
+    const result = await appointmentServices.getMyAppointment(user as IAuthUser, filters, options);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -39,7 +39,7 @@ const getMyAppointment = catchAsync(async (req: Request & { user?: IAuthUser }, 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     const filters = pick(req.query, appointmentFilterableFields)
     const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
-    const result = await AppointmentService.getAllFromDB(filters, options);
+    const result = await appointmentServices.getAllFromDB(filters, options);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -56,7 +56,7 @@ const changeAppointmentStatus = catchAsync(async (req: Request & { user?: IAuthU
 
     console.log(status, id, user);
 
-    const result = await AppointmentService.changeAppointmentStatus(id, status, user as IAuthUser);
+    const result = await appointmentServices.changeAppointmentStatus(id, status, user as IAuthUser);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -65,7 +65,7 @@ const changeAppointmentStatus = catchAsync(async (req: Request & { user?: IAuthU
     });
 });
 
-export const AppointmentController = {
+export const appointmentControllers = {
     createAppointment,
     getMyAppointment,
     getAllFromDB,

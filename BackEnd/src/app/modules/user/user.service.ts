@@ -237,6 +237,9 @@ const getMe = async (user: IAuthUser) => {
       where: {
         email: userInfo.email,
       },
+      include: {
+        patientHealthData: true,
+      },
     });
   }
 

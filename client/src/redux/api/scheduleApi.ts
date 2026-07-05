@@ -20,19 +20,22 @@ export const scheduleApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      transformResponse: (
-        response: {
-          meta: any;
-          data: any;
-        },
-        meta: IMeta
-      ) => {
+      transformResponse: (response: any[], meta: IMeta) => {
         return {
           schedules: response,
           meta,
         };
       },
       providesTags: [tagTypes.schedule],
+    }),
+
+    updateSchedule: build.mutation({
+      query: ({ id, ...data }: { id: string; startDateTime: string; endDateTime: string }) => ({
+        url: `/schedule/${id}`,
+        method: "PATCH",
+        data,
+      }),
+      invalidatesTags: [tagTypes.schedule],
     }),
 
     deleteSchedule: build.mutation({
@@ -48,5 +51,6 @@ export const scheduleApi = baseApi.injectEndpoints({
 export const {
   useCreateScheduleMutation,
   useGetAllSchedulesQuery,
+  useUpdateScheduleMutation,
   useDeleteScheduleMutation,
 } = scheduleApi;

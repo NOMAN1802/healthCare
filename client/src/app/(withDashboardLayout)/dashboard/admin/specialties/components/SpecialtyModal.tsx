@@ -10,11 +10,11 @@ import {
   Typography,
   IconButton,
   CircularProgress,
-  useTheme,
-  useMediaQuery,
   Stack,
   Grid,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Image from "next/image";
@@ -104,7 +104,7 @@ const SpecialtyModal = ({ open, setOpen }: TProps) => {
       fullWidth
       PaperProps={{
         sx: {
-          borderRadius: isMobile ? 0 : 2,
+          borderRadius: isMobile ? 0 : 1,
           background: theme.palette.background.default,
         }
       }}
@@ -149,7 +149,7 @@ const SpecialtyModal = ({ open, setOpen }: TProps) => {
                 sx={{ 
                   border: '2px dashed', 
                   borderColor: selectedFile ? 'primary.main' : 'divider',
-                  borderRadius: 2, 
+                  borderRadius: 1, 
                   p: 3, 
                   textAlign: 'center',
                   cursor: 'pointer',
@@ -221,7 +221,7 @@ const SpecialtyModal = ({ open, setOpen }: TProps) => {
             color="inherit"
             disabled={isLoading}
             sx={{ 
-              borderRadius: 2,
+              borderRadius: 1,
               px: 3
             }}
           >
@@ -232,7 +232,7 @@ const SpecialtyModal = ({ open, setOpen }: TProps) => {
             variant="contained" 
             disabled={isLoading}
             sx={{ 
-              borderRadius: 2,
+              borderRadius: 1,
               px: 3
             }}
           >

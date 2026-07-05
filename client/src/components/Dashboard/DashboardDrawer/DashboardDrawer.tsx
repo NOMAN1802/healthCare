@@ -9,7 +9,8 @@ import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
-import { Avatar, Badge, Stack, Paper, Chip, useTheme, alpha, Fade } from "@mui/material"
+import { Avatar, Badge, Stack, Paper, Chip, Fade } from "@mui/material"
+import { useTheme, alpha } from "@mui/material/styles"
 import AccountMenu from "../AccountMenu/AccountMenu"
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone"
 import SearchIcon from "@mui/icons-material/Search"
@@ -181,7 +182,7 @@ export default function DashboardDrawer({
                 elevation={0}
                 sx={{
                   p: 0.5,
-                  borderRadius: "12px",
+                  borderRadius: "4px",
                   background: alpha(theme.palette.primary.main, 0.1),
                   border: `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
                 }}

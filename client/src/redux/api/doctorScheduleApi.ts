@@ -20,10 +20,9 @@ export const doctorScheduleApi = baseApi.injectEndpoints({
                params: arg,
             };
          },
-         transformResponse: (response: [], meta: IMeta) => {
+         transformResponse: (response: { data: any[]; meta: IMeta }) => {
             return {
                doctorSchedules: response,
-               meta,
             };
          },
          providesTags: [tagTypes.doctorSchedule],

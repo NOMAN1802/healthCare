@@ -84,7 +84,7 @@ const resetPassword = catchAsync(
   }
 );
 
-export const authController = {
+export const authControllers = {
   loginUser,
   refreshToken,
   changePassword,

@@ -4,6 +4,7 @@ import pick from "../../../shared/pick";
 import { sendResponse } from "../../../helpers/sendResponse";
 import { catchAsync } from "../../../helpers/catchAsync";
 import { patientServices } from "./patient.service";
+import { IAuthUser } from "../../interfaces/common";
 
 const getAllFromDB: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
@@ -65,10 +66,22 @@ const softDeleteFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const patientController = {
+const updateMyHealthData = catchAsync(async (req: Request & { user?: IAuthUser }, res: Response) => {
+  const user = req.user as IAuthUser;
+  const result = await patientServices.updateMyHealthData(user.email, req.body);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Health data updated successfully",
+    data: result,
+  });
+});
+
+export const patientControllers = {
   getAllFromDB,
   getByIdFromDB,
   updateIntoDB,
   deleteFromDB,
   softDeleteFromDB,
+  updateMyHealthData,
 };

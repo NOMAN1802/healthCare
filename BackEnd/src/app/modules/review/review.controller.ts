@@ -3,12 +3,12 @@ import { catchAsync } from "../../../helpers/catchAsync";
 import { sendResponse } from "../../../helpers/sendResponse";
 import { IAuthUser } from "../../interfaces/common";
 import pick from "../../../shared/pick";
-import { ReviewServices } from "./review.services";
+import { reviewServices } from "./review.services";
 
 const createIntoDB: RequestHandler = catchAsync(
   async (req: Request & { user?: IAuthUser }, res: Response) => {
     const user = req.user;
-    const result = await ReviewServices.createIntoDB(
+    const result = await reviewServices.createIntoDB(
       user as IAuthUser,
       req.body
     );
@@ -26,7 +26,7 @@ const getAllReview: RequestHandler = catchAsync(
   async (req: Request & { user?: IAuthUser }, res: Response) => {
     const user = req.user;
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
-    const result = await ReviewServices.getAllReview(user as IAuthUser, options);
+    const result = await reviewServices.getAllReview(user as IAuthUser, options);
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -36,7 +36,7 @@ const getAllReview: RequestHandler = catchAsync(
   }
 );
 
-export const ReviewController = {
+export const reviewControllers = {
   createIntoDB,
   getAllReview,
 };

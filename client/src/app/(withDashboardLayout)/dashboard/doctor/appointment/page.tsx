@@ -1,7 +1,9 @@
 "use client";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import VideocamIcon from "@mui/icons-material/Videocam";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import Link from "next/link";
 import {
   useGetMyAppointmentsQuery,
@@ -11,6 +13,7 @@ import { dateFormatter } from "@/utils/dateFormatter";
 import { getTimeIn12HourFormat } from "../schedules/components/MultipleSelectFieldChip";
 import PhChips from "@/components/Shared/PhChip/PhChips";
 import { toast } from "sonner";
+import PrescriptionModal from "./components/PrescriptionModal";
 
 const statusChipType: Record<string, "info" | "warning" | "success" | "error"> = {
   SCHEDULED: "info",
@@ -24,6 +27,7 @@ const DoctorAppointmentPage = () => {
   const appointments: any[] = data?.appointments?.data ?? [];
 
   const [changeStatus] = useAppointmentStatusChangeMutation();
+  const [prescriptionAppointment, setPrescriptionAppointment] = useState<any>(null);
 
   const handleStatus = async (id: string, status: string) => {
     try {
@@ -89,7 +93,7 @@ const DoctorAppointmentPage = () => {
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1.5,
+      flex: 1.8,
       headerAlign: "center",
       align: "center",
       renderCell: ({ row }) => (
@@ -113,6 +117,20 @@ const DoctorAppointmentPage = () => {
             >
               Complete
             </Button>
+          )}
+          {row.status === "COMPLETED" && row.paymentStatus === "PAID" && (
+            <Tooltip title="Write Prescription">
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                startIcon={<MedicalServicesIcon fontSize="small" />}
+                onClick={() => setPrescriptionAppointment(row)}
+                sx={{ fontSize: 12 }}
+              >
+                Prescribe
+              </Button>
+            </Tooltip>
           )}
           <IconButton
             component={Link}
@@ -142,6 +160,14 @@ const DoctorAppointmentPage = () => {
         autoHeight
         disableRowSelectionOnClick
       />
+
+      {prescriptionAppointment && (
+        <PrescriptionModal
+          open={!!prescriptionAppointment}
+          onClose={() => setPrescriptionAppointment(null)}
+          appointment={prescriptionAppointment}
+        />
+      )}
     </Box>
   );
 };

@@ -14,15 +14,27 @@ export const metaApi = baseApi.injectEndpoints({
       },
       transformResponse: (
         response: {
-          appointmentCount: number;
-          patientCoount: number;
-          doctorCount: number;
-          paymentCount: number;
-          totalRevenue: {
-            _sum: {
-              amount: number;
-            };
-          };
+          // admin / super-admin fields
+          appointmentCount?: number;
+          patientCoount?: number;
+          doctorCount?: number;
+          paymentCount?: number;
+          adminCount?: number;
+          totalRevenue?: number | { _sum: { amount: number } };
+          recentActivities?: {
+            id: string;
+            action: string;
+            user: string;
+            createdAt: string;
+            activityStatus: string;
+          }[];
+          // doctor / patient fields
+          patientCount?: number;
+          reviewCount?: number;
+          formattedAppointmentStatusDistribution?: {
+            status: string;
+            count: number;
+          }[];
         },
         meta: IMeta
       ) => {

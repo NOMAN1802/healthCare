@@ -10,7 +10,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn"
 import { useGetAllPrescriptionsQuery } from "@/redux/api/prescriptionApi"
 
 const PrescriptionPage = () => {
-  const [selectedPrescription, setSelectedPrescription] = useState(null)
+  const [selectedPrescription, setSelectedPrescription] = useState<any>(null)
   const { data, isLoading } = useGetAllPrescriptionsQuery({})
 
   const prescriptions = data?.prescriptions?.data || []

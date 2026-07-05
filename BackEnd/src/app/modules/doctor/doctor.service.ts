@@ -224,7 +224,7 @@ const updateIntoDB = async (id: string, payload: DoctorUpdatePayload) => {
   return result;
 };
 
-export const doctorService = {
+export const doctorServices = {
   getAllFromDB,
   getByIdFromDB,
   deleteFromDB,

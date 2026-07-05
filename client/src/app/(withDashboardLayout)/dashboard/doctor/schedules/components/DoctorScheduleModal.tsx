@@ -2,13 +2,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import PHModal from '@/components/Shared/PHModal/PHModal';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useGetAllSchedulesQuery } from '@/redux/api/scheduleApi';
 import MultipleSelectFieldChip from './MultipleSelectFieldChip';
 import { Stack } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useCreateDoctorScheduleMutation } from '@/redux/api/doctorScheduleApi';
+import { toast } from 'sonner';
 
 type TProps = {
    open: boolean;
@@ -39,27 +40,23 @@ const DoctorScheduleModal = ({ open, setOpen }: TProps) => {
 
    const { data } = useGetAllSchedulesQuery(query);
    // data.schedules may be the array directly or { data: [...] } depending on backend shape
-   const rawSchedules = data?.schedules;
-   const schedules: any[] = Array.isArray(rawSchedules)
-     ? rawSchedules
-     : Array.isArray(rawSchedules?.data)
-     ? rawSchedules.data
-     : [];
+   const schedules: any[] = data?.schedules ?? [];
 
    const [createDoctorSchedule, { isLoading }] =
       useCreateDoctorScheduleMutation();
 
-   console.log(selectedScheduleIds);
-
    const onSubmit = async () => {
+      if (!selectedScheduleIds.length) {
+         toast.error('Please select at least one time slot');
+         return;
+      }
       try {
-         const res = await createDoctorSchedule({
-            scheduleIds: selectedScheduleIds,
-         });
-         console.log(res);
+         await createDoctorSchedule({ scheduleIds: selectedScheduleIds }).unwrap();
+         toast.success('Schedule slots added successfully');
+         setSelectedScheduleIds([]);
          setOpen(false);
-      } catch (error) {
-         console.log(error);
+      } catch (err: any) {
+         toast.error(err?.data?.message ?? 'Failed to add schedule slots');
       }
    };
 

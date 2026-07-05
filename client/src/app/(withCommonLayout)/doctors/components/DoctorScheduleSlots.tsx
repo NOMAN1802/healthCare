@@ -88,7 +88,7 @@ const SlotGroup = ({
               onClick={() => onSelect(ds.scheduleId)}
               startIcon={<AccessTimeIcon sx={{ fontSize: '14px !important' }} />}
               sx={{
-                borderRadius: 2,
+                borderRadius: 1,
                 textTransform: 'none',
                 fontWeight: 600,
                 fontSize: '0.8rem',
@@ -185,7 +185,7 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
           mt: 4,
           px: 5,
           py: 1.5,
-          borderRadius: 3,
+          borderRadius: 1,
           textTransform: 'none',
           fontWeight: 700,
           fontSize: '1rem',

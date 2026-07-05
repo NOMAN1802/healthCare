@@ -25,8 +25,10 @@ const Footer = () => {
           </Typography>
           <Typography
             color="#fff"
+            component={Link}
+            href="/health-plans"
             sx={{
-              cursor: "pointer",
+              textDecoration: "none",
               "&:hover": { color: "#e3f2fd" },
               transition: "color 0.2s",
             }}
@@ -35,8 +37,10 @@ const Footer = () => {
           </Typography>
           <Typography
             color="#fff"
+            component={Link}
+            href="/medicine"
             sx={{
-              cursor: "pointer",
+              textDecoration: "none",
               "&:hover": { color: "#e3f2fd" },
               transition: "color 0.2s",
             }}
@@ -45,8 +49,10 @@ const Footer = () => {
           </Typography>
           <Typography
             color="#fff"
+            component={Link}
+            href="/diagnostics"
             sx={{
-              cursor: "pointer",
+              textDecoration: "none",
               "&:hover": { color: "#e3f2fd" },
               transition: "color 0.2s",
             }}

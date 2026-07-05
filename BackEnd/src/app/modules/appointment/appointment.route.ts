@@ -1,5 +1,5 @@
 import express from 'express'
-import { AppointmentController } from './appointment.controller';
+import { appointmentControllers } from './appointment.controller';
 import { authValidation } from '../../middlewares/authValidation';
 import { UserRole } from '../../../generated/prisma';
 import { validateRequest } from '../../middlewares/validateRequest';
@@ -12,25 +12,25 @@ router.post(
     '/',
     authValidation(UserRole.PATIENT),
     validateRequest(AppointmentValidation.createAppointment),
-    AppointmentController.createAppointment
+    appointmentControllers.createAppointment
 );
 
 router.get(
     '/',
     authValidation(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-    AppointmentController.getAllFromDB
+    appointmentControllers.getAllFromDB
 );
 
 router.get(
     '/my-appointment',
     authValidation(UserRole.PATIENT, UserRole.DOCTOR),
-    AppointmentController.getMyAppointment
+    appointmentControllers.getMyAppointment
 )
 
 router.patch(
     '/status/:id',
     authValidation(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.DOCTOR),
-    AppointmentController.changeAppointmentStatus
+    appointmentControllers.changeAppointmentStatus
 );
 
 

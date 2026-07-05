@@ -16,6 +16,7 @@ import {
   TableRow,
   Chip,
   LinearProgress,
+  Skeleton,
 } from "@mui/material";
 import {
   Analytics,
@@ -29,46 +30,48 @@ import { TotalAppointment } from "@/components/Dashboard/DashboardEssential/Tota
 import { useGetMetaQuery } from "@/redux/api/metaApi";
 import { TotalPatient } from "@/components/Dashboard/DashboardEssential/TotalPatient";
 import { TotalDoctor } from "@/components/Dashboard/DashboardEssential/TotalDoctor";
+import { TotalRevenue } from "@/components/Dashboard/DashboardEssential/TotalRevenue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
+type TActivity = {
+  id: string;
+  action: string;
+  user: string;
+  createdAt: string;
+  activityStatus: string;
+};
+
+const statusChipProps = (
+  activityStatus: string
+): { label: string; color: "success" | "warning" | "error" | "info" | "default" } => {
+  switch (activityStatus) {
+    case "PAID":
+    case "COMPLETED":
+      return { label: "success", color: "success" };
+    case "CANCELLED":
+      return { label: "cancelled", color: "error" };
+    case "INPROGRESS":
+      return { label: "in progress", color: "warning" };
+    case "SCHEDULED":
+      return { label: "scheduled", color: "info" };
+    default:
+      return { label: activityStatus.toLowerCase(), color: "default" };
+  }
+};
 
 const AdminPage = () => {
-  const { data: meta, isLoading, error } = useGetMetaQuery({});
-  const recentActivities = [
-    {
-      id: 1,
-      action: "New doctor registered",
-      user: "Dr. Sarah Wilson",
-      time: "2 hours ago",
-      status: "success",
-    },
-    {
-      id: 2,
-      action: "Payment processed",
-      user: "John Doe",
-      time: "3 hours ago",
-      status: "success",
-    },
-    {
-      id: 3,
-      action: "Appointment cancelled",
-      user: "Emma Johnson",
-      time: "5 hours ago",
-      status: "warning",
-    },
-    {
-      id: 4,
-      action: "System maintenance",
-      user: "System",
-      time: "1 day ago",
-      status: "info",
-    },
-  ];
+  const { data: meta, isLoading } = useGetMetaQuery({});
 
-  console.log(meta?.response);
-
-  const totalAppointment = Number(meta?.response.appointmentCount);
-  const totalPatient = Number(meta?.response.patientCoount);
-  const totalDoctor = Number(meta?.response.doctorCount);
-  const totalRevenue = Number(meta?.response?.totalRevenue)
+  const totalAppointment = Number(meta?.response?.appointmentCount);
+  const totalPatient = Number(meta?.response?.patientCoount);
+  const totalDoctor = Number(meta?.response?.doctorCount);
+  const totalRevenue = Number(
+    (meta?.response?.totalRevenue as { _sum: { amount: number } } | undefined)?._sum?.amount ?? 0
+  );
+  const recentActivities: TActivity[] = meta?.response?.recentActivities ?? [];
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
@@ -143,7 +146,13 @@ const AdminPage = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          Totla Payment Count or Revenue
+          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+            <AdminDashboardCardTittle tittle="Total Revenue" />
+            <TotalRevenue
+              totalRevenue={totalRevenue}
+              label="Total Revenue (BDT)"
+            />
+          </div>
         </Grid>
 
         {/* Recent Activities */}
@@ -164,26 +173,43 @@ const AdminPage = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {recentActivities.map((activity) => (
-                      <TableRow key={activity.id}>
-                        <TableCell>{activity.action}</TableCell>
-                        <TableCell>{activity.user}</TableCell>
-                        <TableCell>{activity.time}</TableCell>
-                        <TableCell>
-                          <Chip
-                            label={activity.status}
-                            size="small"
-                            color={
-                              activity.status === "success"
-                                ? "success"
-                                : activity.status === "warning"
-                                ? "warning"
-                                : "info"
-                            }
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {isLoading
+                      ? Array.from({ length: 4 }).map((_, i) => (
+                          <TableRow key={i}>
+                            {Array.from({ length: 4 }).map((_, j) => (
+                              <TableCell key={j}>
+                                <Skeleton variant="text" width="80%" />
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))
+                      : recentActivities.length === 0
+                      ? (
+                          <TableRow>
+                            <TableCell colSpan={4} align="center" sx={{ color: "text.secondary", py: 4 }}>
+                              No recent activities found
+                            </TableCell>
+                          </TableRow>
+                        )
+                      : recentActivities.map((activity) => {
+                          const chip = statusChipProps(activity.activityStatus);
+                          return (
+                            <TableRow key={activity.id}>
+                              <TableCell>{activity.action}</TableCell>
+                              <TableCell>{activity.user}</TableCell>
+                              <TableCell sx={{ whiteSpace: "nowrap" }}>
+                                {dayjs(activity.createdAt).fromNow()}
+                              </TableCell>
+                              <TableCell>
+                                <Chip
+                                  label={chip.label}
+                                  size="small"
+                                  color={chip.color}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
                   </TableBody>
                 </Table>
               </TableContainer>

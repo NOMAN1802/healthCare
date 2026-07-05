@@ -36,7 +36,7 @@ const getMyPrescription: RequestHandler = catchAsync(
     });
   }
 );
-export const PrescriptionController = {
+export const prescriptionControllers = {
   createIntoDB,
   getMyPrescription,
 };

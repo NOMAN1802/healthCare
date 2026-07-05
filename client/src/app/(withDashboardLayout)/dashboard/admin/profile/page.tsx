@@ -14,7 +14,7 @@ const ProfilePage = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 1 }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
           <Avatar sx={{ width: 80, height: 80, mr: 3, bgcolor: "primary.main" }}>
             <PersonIcon sx={{ fontSize: 40 }} />

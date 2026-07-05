@@ -13,11 +13,11 @@ import {
   DialogActions,
   AppBar,
   Toolbar,
-  useTheme,
-  useMediaQuery,
   CircularProgress,
   Alert
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState, useEffect } from "react";
 import {
   useDeleteSpecialtyMutation,

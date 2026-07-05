@@ -8,7 +8,7 @@ export const globalErrorHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  let statusCode = status.INTERNAL_SERVER_ERROR;
+  let statusCode: number = status.INTERNAL_SERVER_ERROR;
   let message = "Something went wrong!";
 
   // Zod validation errors → 400

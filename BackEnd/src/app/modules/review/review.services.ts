@@ -104,7 +104,7 @@ const getAllReview = async (user: IAuthUser, options: IPagination) => {
   };
 };
 
-export const ReviewServices = {
+export const reviewServices = {
   createIntoDB,
   getAllReview,
 };

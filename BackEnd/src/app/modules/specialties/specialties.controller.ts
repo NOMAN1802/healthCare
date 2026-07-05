@@ -36,7 +36,7 @@ const deleteById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const specialtiesController = {
+export const specialtiesControllers = {
   insertIntoDB,
   getAllFromDB,
   deleteById,

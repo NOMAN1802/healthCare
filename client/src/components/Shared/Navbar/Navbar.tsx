@@ -15,11 +15,11 @@ import {
   Stack,
   Toolbar,
   Typography,
-  useMediaQuery,
-  useTheme,
   Avatar,
   Divider,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -128,10 +128,12 @@ const Navbar = () => {
                 Doctors
               </Typography>
               <Typography
+                component={Link}
+                href="/diagnostics"
                 sx={{
                   color: "white",
                   fontWeight: 500,
-                  cursor: "pointer",
+                  textDecoration: "none",
                   "&:hover": { color: "#e3f2fd" },
                   transition: "color 0.2s",
                 }}
@@ -218,7 +220,7 @@ const Navbar = () => {
         >
           Doctors
         </MenuItem>
-        <MenuItem onClick={handleMobileMenuClose}>Diagnostics</MenuItem>
+        <MenuItem component={Link} href="/diagnostics" onClick={handleMobileMenuClose}>Diagnostics</MenuItem>
         {userInfo?.email ? [
           <Divider key="divider" />,
           <MenuItem

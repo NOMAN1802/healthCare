@@ -1,8 +1,9 @@
-import { Box, Stack, styled, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({
    background: '#f4f7fe',
-   borderRadius: theme.spacing(1),
+   borderRadius: "4px",
    width: '45%',
    padding: '8px 16px',
    '& p': {

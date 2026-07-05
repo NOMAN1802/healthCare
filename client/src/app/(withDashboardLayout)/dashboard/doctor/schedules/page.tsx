@@ -56,12 +56,7 @@ const EditSlotModal = ({
   };
 
   const { data } = useGetAllSchedulesQuery(query);
-  const rawSchedules = data?.schedules;
-  const schedules: any[] = Array.isArray(rawSchedules)
-    ? rawSchedules
-    : Array.isArray(rawSchedules?.data)
-    ? rawSchedules.data
-    : [];
+  const schedules: any[] = data?.schedules ?? [];
 
   const [deleteSchedule] = useDeleteDoctorScheduleMutation();
   const [createSchedule, { isLoading: creating }] = useCreateDoctorScheduleMutation();
@@ -130,7 +125,13 @@ const DoctorSchedulesPage = () => {
   const { data, isLoading } = useGetMyScheduleQuery({} as any);
   const [deleteSchedule] = useDeleteDoctorScheduleMutation();
 
-  const raw: any[] = (data as any)?.data ?? [];
+  // getMySchedule controller sends data: result where result = { meta, data: [...] }
+  // so the array is at data.data
+  const raw: any[] = Array.isArray((data as any)?.data)
+    ? (data as any).data
+    : Array.isArray(data)
+    ? data
+    : [];
   const rows = raw.map((s: any) => ({
     id: s.scheduleId,
     date: s?.schedule?.startDateTime

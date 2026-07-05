@@ -23,16 +23,28 @@ const getAllFromDB: RequestHandler = catchAsync(
     const user = req?.user;
     const query = pick(req.query, ["startDate","endDate"]);
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
-    const result = await scheduleServices.getAllFromDB(query, options,user as IAuthUser);
+    const result = await scheduleServices.getAllFromDB(query, options, user as IAuthUser);
     sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "Schedule Fetched Successfully",
-      data: result,
+      meta: result.meta,
+      data: result.data,
     });
   }
 );
 
+
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await scheduleServices.updateIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Schedule updated successfully",
+    data: result,
+  });
+});
 
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -56,9 +68,10 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export const scheduleController = {
+export const scheduleControllers = {
   createIntoDB,
   getAllFromDB,
   getByIdFromDB,
-  deleteFromDB
+  updateIntoDB,
+  deleteFromDB,
 };

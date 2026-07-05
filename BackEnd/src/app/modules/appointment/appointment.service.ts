@@ -12,6 +12,13 @@ import {
   Prisma,
   UserRole,
 } from "../../../generated/prisma";
+import sendEmail from "../../../helpers/emailHelper";
+import {
+  appointmentBookedTemplate,
+  appointmentCancelledTemplate,
+  appointmentCompletedTemplate,
+  appointmentInProgressTemplate,
+} from "../../../helpers/appointmentEmailTemplates";
 
 const createAppointment = async (user: IAuthUser, payload: any) => {
   const patientData = await prisma.patient.findUniqueOrThrow({
@@ -109,6 +116,18 @@ const createAppointment = async (user: IAuthUser, payload: any) => {
     return appointmentData;
   });
 
+  // Send booking confirmation email (fire-and-forget — don't block response)
+  const emailTemplate = appointmentBookedTemplate({
+    patientName: result.patient.name,
+    doctorName: result.doctor.name,
+    doctorDesignation: result.doctor.designation,
+    startDateTime: result.schedule.startDateTime.toISOString(),
+    endDateTime: result.schedule.endDateTime.toISOString(),
+    fee: result.doctor.appointmentFee,
+    videoCallingId: result.videoCallingId,
+  });
+  sendEmail({ to: result.patient.email, ...emailTemplate }).catch(() => {});
+
   return result;
 };
 
@@ -159,6 +178,7 @@ const getAllFromDB = async (filters: any, options: IPagination) => {
     include: {
       doctor: true,
       patient: true,
+      schedule: true,
     },
   });
   const total = await prisma.appointment.count({
@@ -249,11 +269,11 @@ const changeAppointmentStatus = async (
   user: IAuthUser
 ) => {
   const appointmentData = await prisma.appointment.findUniqueOrThrow({
-    where: {
-      id: appointmentId,
-    },
+    where: { id: appointmentId },
     include: {
       doctor: true,
+      patient: true,
+      schedule: true,
     },
   });
 
@@ -267,13 +287,40 @@ const changeAppointmentStatus = async (
   }
 
   const result = await prisma.appointment.update({
-    where: {
-      id: appointmentId,
-    },
-    data: {
-      status,
-    },
+    where: { id: appointmentId },
+    data: { status },
   });
+
+  // Send status-change email (fire-and-forget)
+  const { patient, doctor, schedule } = appointmentData;
+  const startDateTime = schedule.startDateTime.toISOString();
+  const endDateTime = schedule.endDateTime.toISOString();
+
+  if (status === AppointmentStatus.CANCELLED) {
+    const tmpl = appointmentCancelledTemplate({
+      patientName: patient.name,
+      doctorName: doctor.name,
+      startDateTime,
+      endDateTime,
+    });
+    sendEmail({ to: patient.email, ...tmpl }).catch(() => {});
+  } else if (status === AppointmentStatus.COMPLETED) {
+    const tmpl = appointmentCompletedTemplate({
+      patientName: patient.name,
+      doctorName: doctor.name,
+      doctorDesignation: doctor.designation,
+      startDateTime,
+    });
+    sendEmail({ to: patient.email, ...tmpl }).catch(() => {});
+  } else if (status === AppointmentStatus.INPROGRESS) {
+    const tmpl = appointmentInProgressTemplate({
+      patientName: patient.name,
+      doctorName: doctor.name,
+      startDateTime,
+      endDateTime,
+    });
+    sendEmail({ to: patient.email, ...tmpl }).catch(() => {});
+  }
 
   return result;
 };
@@ -296,7 +343,7 @@ const cancelUnpaidAppointments = async () => {
     (appointment) => appointment.id
   );
 
-
+  if (unPaidAppointmentIds.length === 0) return;
 
   await prisma.$transaction(async (tx) => {
    await tx.payment.deleteMany({
@@ -332,7 +379,7 @@ const cancelUnpaidAppointments = async () => {
 
 };
 
-export const AppointmentService = {
+export const appointmentServices = {
   createAppointment,
   getMyAppointment,
   getAllFromDB,

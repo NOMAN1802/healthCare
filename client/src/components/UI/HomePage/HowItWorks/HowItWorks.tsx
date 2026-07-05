@@ -48,7 +48,7 @@ const HowItWorks = () => {
                     sx={{
                       backgroundColor: "#fff",
                       border: "1px solid lightgray",
-                      borderRadius: "10px",
+                      borderRadius: "4px",
                       padding: "20px",
                     }}
                   >
@@ -77,7 +77,7 @@ const HowItWorks = () => {
                     sx={{
                       backgroundColor: "#fff",
                       border: "1px solid lightgray",
-                      borderRadius: "10px",
+                      borderRadius: "4px",
                       padding: "20px",
                     }}
                   >
@@ -106,7 +106,7 @@ const HowItWorks = () => {
                     sx={{
                       backgroundColor: "#fff",
                       border: "1px solid lightgray",
-                      borderRadius: "10px",
+                      borderRadius: "4px",
                       padding: "20px",
                     }}
                   >
@@ -135,7 +135,7 @@ const HowItWorks = () => {
                     sx={{
                       backgroundColor: "#fff",
                       border: "1px solid lightgray",
-                      borderRadius: "10px",
+                      borderRadius: "4px",
                       padding: "20px",
                     }}
                   >

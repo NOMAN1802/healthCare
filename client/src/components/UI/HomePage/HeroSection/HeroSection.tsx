@@ -1,9 +1,20 @@
+"use client";
 import { Box, Button, Container, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 import assets from "@/assets";
 import doctor1 from "@/assets/images/doctor1.png";
 import doctor2 from "@/assets/images/doctor2.png";
+import useUserInfo from "@/hooks/useUserInfo";
+import { USER_ROLE } from "@/contants/role";
+
 const HeroSection = () => {
+  const userInfo = useUserInfo();
+  const role = userInfo?.role ?? "";
+
+  // Only patients see the Make Appointment button
+  const isPatient = role === USER_ROLE.PATIENT;
+
   return (
     <Container
       sx={{
@@ -12,6 +23,7 @@ const HeroSection = () => {
         my: 16,
       }}
     >
+      {/* ── Left: Text content ── */}
       <Box sx={{ flex: 1, position: "relative" }}>
         <Box
           sx={{
@@ -21,7 +33,7 @@ const HeroSection = () => {
             top: "-120px",
           }}
         >
-          <Image src={assets.svgs.grid} alt="doctor1" />
+          <Image src={assets.svgs.grid} alt="" />
         </Box>
         <Typography variant="h2" component="h1" fontWeight={600}>
           Healthier Hearts
@@ -44,11 +56,20 @@ const HeroSection = () => {
           vitae id?
         </Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button>Make appointment</Button>
-          <Button variant="outlined">Contact us</Button>
+          {/* Visible only for patient role */}
+          {isPatient && (
+            <Button component={Link} href="/doctors" variant="contained">
+              Make Appointment
+            </Button>
+          )}
+          {/* Visible for all users including unauthenticated */}
+          <Button component={Link} href="/consultation" variant="outlined">
+            Contact Us
+          </Button>
         </Box>
       </Box>
 
+      {/* ── Right: Image collage ── */}
       <Box
         sx={{
           p: 1,
@@ -66,45 +87,73 @@ const HeroSection = () => {
             top: "-30px",
           }}
         >
-          <Image src={assets.svgs.arrow} width={100} height={100} alt="arrow" />
+          <Image src={assets.svgs.arrow} width={100} height={100} alt="" />
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-          }}
-        >
-          <Box mt={4}>
+
+        {/* doctor1 + doctor2 side by side — oval frames */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Box
+            mt={4}
+            sx={{
+              width: 240,
+              height: 380,
+              
+            }}
+          >
             <Image
               src={doctor1}
-              width={240}
+              width={250}
               height={380}
-              alt="doctor1"
+              alt="doctor"
+              style={{ display: "block", objectFit: "cover", width: "100%", height: "100%" }}
             />
           </Box>
-          <Box>
+
+          <Box
+            sx={{
+              width: 250,
+              height: 380,
+              
+            }}
+          >
             <Image
               src={doctor2}
-              width={240}
-              height={350}
-              alt="doctor2"
+              width={250}
+              height={380}
+              alt="doctor"
+              style={{ display: "block", objectFit: "cover", width: "100%", height: "100%" }}
             />
           </Box>
         </Box>
+
+        {/* doctor3 — oval frame, overlapping center */}
         <Box
           sx={{
             position: "absolute",
-            top: "220px",
-            left: "150px",
+            top: "250px",
+            left: "160px",
+            
+            width: 200,
+            height: 200,
+            borderRadius: "10px",
           }}
         >
           <Image
             src={assets.images.doctor3}
-            width={240}
-            height={240}
-            alt="doctor3"
+            width={200}
+            height={200}
+            alt="doctor"
+            style={{
+              display: "block",
+              objectFit: "cover",
+              objectPosition: "center top",
+              width: "100%",
+              height: "100%",
+            }}
           />
         </Box>
+
+        {/* Stethoscope decoration */}
         <Box
           sx={{
             position: "absolute",
@@ -113,12 +162,7 @@ const HeroSection = () => {
             zIndex: "-1",
           }}
         >
-          <Image
-            src={assets.images.stethoscope}
-            width={180}
-            height={180}
-            alt="doctor3"
-          />
+          <Image src={assets.images.stethoscope} width={180} height={180} alt="" />
         </Box>
       </Box>
     </Container>

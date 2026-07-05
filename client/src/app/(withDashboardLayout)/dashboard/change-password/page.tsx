@@ -44,7 +44,7 @@ const ChangePassword = () => {
           px: 4,
           py: 4,
           boxShadow: 3,
-          borderRadius: 2,
+          borderRadius: 1,
           bgcolor: "background.paper",
           border: "1px solid",
           borderColor: "divider",

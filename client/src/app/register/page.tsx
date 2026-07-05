@@ -128,7 +128,7 @@ export default function RegisterPage() {
                 width: 64,
                 height: 64,
                 backgroundColor: "#6366f1",
-                borderRadius: 3,
+                borderRadius: 1,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

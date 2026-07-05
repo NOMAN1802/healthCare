@@ -1,6 +1,6 @@
 import { addHours, addMinutes, format } from "date-fns";
 import { prisma } from "../../../shared/prisma";
-import { Prisma, Schedule } from "../../../generated/prisma";
+import { Prisma, Schedule, UserRole } from "../../../generated/prisma";
 import { IFilterRequest, ISchedule } from "./schedule.interface";
 import { paginationHelper } from "../../../helpers/paginationHelper";
 import { IAuthUser } from "../../interfaces/common";
@@ -9,7 +9,6 @@ import { IPagination } from "../../interfaces/paginationInterface";
 const createIntoDB = async (payload: ISchedule): Promise<Schedule[]> => {
   const { startDate, endDate, startTime, endTime } = payload;
 
-  console.log(startDate, startTime);
   const intervalTime = 30;
   const schedule = [];
 
@@ -74,16 +73,8 @@ const getAllFromDB = async (filters: IFilterRequest, options: IPagination, user:
   if (startDate && endDate) {
     andConditions.push({
       AND: [
-        {
-          startDateTime: {
-            gte: startDate,
-          },
-        },
-        {
-          endDateTime: {
-            lte: endDate,
-          },
-        },
+        { startDateTime: { gte: startDate } },
+        { endDateTime: { lte: endDate } },
       ],
     });
   }
@@ -91,67 +82,56 @@ const getAllFromDB = async (filters: IFilterRequest, options: IPagination, user:
   if (Object.keys(filteredData).length > 0) {
     andConditions.push({
       AND: Object.keys(filteredData).map((field) => ({
-        [field]: {
-          equals: filteredData[field as keyof typeof filteredData],
-        },
+        [field]: { equals: filteredData[field as keyof typeof filteredData] },
       })),
     });
   }
 
-  const whereConditions: Prisma.ScheduleWhereInput = {
-    AND: andConditions,
-  };
+  const whereConditions: Prisma.ScheduleWhereInput = { AND: andConditions };
 
-  const doctorSchedules = await prisma.doctorSchedule.findMany({
-    where: {
-      doctor: {
-        email: user.email,
-      },
-    },
-  });
+  // Doctors only see schedules they haven't claimed yet.
+  // Admins/super-admins see all schedules.
+  let excludeIds: string[] = [];
+  if (user.role === UserRole.DOCTOR) {
+    const claimed = await prisma.doctorSchedule.findMany({
+      where: { doctor: { email: user.email } },
+    });
+    excludeIds = claimed.map((s) => s.scheduleId);
+  }
 
-  const doctorSchedulesIds = doctorSchedules.map(
-    (schedule) => schedule.scheduleId
-  );
-
-  console.log(doctorSchedulesIds);
+  const finalWhere: Prisma.ScheduleWhereInput =
+    excludeIds.length > 0
+      ? { ...whereConditions, id: { notIn: excludeIds } }
+      : whereConditions;
 
   const result = await prisma.schedule.findMany({
-    where: {
-      ...whereConditions,
-      id: {
-        notIn: doctorSchedulesIds,
-      },
-    },
-    skip: skip,
+    where: finalWhere,
+    skip,
     take: limit,
     orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
-        : { createdAt: "desc" },
+      sortBy && sortOrder ? { [sortBy]: sortOrder } : { createdAt: "desc" },
   });
 
-  const total = await prisma.schedule.count({
-    where: {
-      ...whereConditions,
-      id: {
-        notIn: doctorSchedulesIds,
-      },
-    },
-  });
+  const total = await prisma.schedule.count({ where: finalWhere });
 
-  return {
-    meta: {
-      page,
-      limit,
-      total,
-    },
-    data: result,
-  };
+  return { meta: { page, limit, total }, data: result };
 };
 
+
+const updateIntoDB = async (
+  id: string,
+  payload: { startDateTime: string; endDateTime: string }
+): Promise<Schedule> => {
+  await prisma.schedule.findUniqueOrThrow({ where: { id } });
+  const result = await prisma.schedule.update({
+    where: { id },
+    data: {
+      startDateTime: new Date(payload.startDateTime),
+      endDateTime: new Date(payload.endDateTime),
+    },
+  });
+  return result;
+};
 
 const getByIdFromDB = async (id: string): Promise<Schedule | null> => {
     const result = await prisma.schedule.findUnique({
@@ -176,5 +156,6 @@ export const scheduleServices = {
   createIntoDB,
   getAllFromDB,
   getByIdFromDB,
-  deleteFromDB
+  updateIntoDB,
+  deleteFromDB,
 };

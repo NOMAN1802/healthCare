@@ -40,7 +40,7 @@ const PaymentStatusContent = () => {
                mx: 'auto',
                width: '100%',
                maxWidth: 500,
-               borderRadius: 2,
+               borderRadius: 1,
                boxShadow: 1,
                py: 5,
                px: 2,

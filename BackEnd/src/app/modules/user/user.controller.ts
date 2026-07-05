@@ -105,7 +105,7 @@ const updateMyProfile = catchAsync(
   }
 );
 
-export const userController = {
+export const userControllers = {
   createAdmin,
   createDoctor,
   createPatient,

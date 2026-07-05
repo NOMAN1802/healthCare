@@ -25,7 +25,7 @@ const DoctorList = () => {
   const doctors: any[] = data?.doctors ?? [];
 
   return (
-    <Box sx={{ mt: 2, p: 3, bgcolor: "secondary.light", borderRadius: 2, minHeight: "60vh" }}>
+    <Box sx={{ mt: 2, p: 3, bgcolor: "secondary.light", borderRadius: 1, minHeight: "60vh" }}>
       {isLoading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="40vh">
           <CircularProgress />

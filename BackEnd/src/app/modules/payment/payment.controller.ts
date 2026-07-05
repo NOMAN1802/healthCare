@@ -43,7 +43,7 @@ const handleCancel: RequestHandler = catchAsync(
   }
 );
 
-export const PaymentController = {
+export const paymentControllers = {
   initPayment,
   validatePayment,
   handleFail,

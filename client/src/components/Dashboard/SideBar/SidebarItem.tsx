@@ -28,7 +28,7 @@ const SidebarItem = ({ item }: IProps) => {
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.2 }}>
             <ListItemButton
               sx={{
-                borderRadius: "12px",
+                borderRadius: "4px",
                 py: 1.5,
                 px: 2,
                 position: "relative",

@@ -70,7 +70,7 @@ const getAllFromDB: RequestHandler = catchAsync(
   }
 );
 
-export const doctorScheduleController = {
+export const doctorScheduleControllers = {
   createIntoDB,
   getMySchedule,
   deleteFromDB,

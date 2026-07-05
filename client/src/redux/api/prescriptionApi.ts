@@ -20,10 +20,9 @@ export const appointmentApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      transformResponse: (response: [], meta: IMeta) => {
+      transformResponse: (response: { data: any[]; meta: IMeta }) => {
         return {
           prescriptions: response,
-          meta,
         };
       },
       providesTags: [tagTypes.prescription],

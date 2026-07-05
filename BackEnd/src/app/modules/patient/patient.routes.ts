@@ -1,19 +1,25 @@
 import { authValidation } from "./../../middlewares/authValidation";
 import express from "express";
 import { UserRole } from "../../../generated/prisma";
-import { patientController } from "./patient.controller";
+import { patientControllers } from "./patient.controller";
 
 const router = express.Router();
 
 router.get(
   "/",
   authValidation(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  patientController.getAllFromDB
+  patientControllers.getAllFromDB
 );
+router.patch(
+  "/update-my-health-data",
+  authValidation(UserRole.PATIENT),
+  patientControllers.updateMyHealthData
+);
+
 router.get(
   "/:id",
   authValidation(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  patientController.getByIdFromDB
+  patientControllers.getByIdFromDB
 );
 router.patch(
   "/:id",
@@ -23,15 +29,14 @@ router.patch(
     UserRole.DOCTOR,
     UserRole.PATIENT
   ),
-  //   validateRequest(adminValidationSchemas.update), I
-  patientController.updateIntoDB
+  patientControllers.updateIntoDB
 );
 
-router.delete("/:id", patientController.deleteFromDB);
+router.delete("/:id", patientControllers.deleteFromDB);
 
 router.delete(
   "/soft/:id",
   authValidation(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  patientController.softDeleteFromDB
+  patientControllers.softDeleteFromDB
 );
 export const PatientRoutes = router;

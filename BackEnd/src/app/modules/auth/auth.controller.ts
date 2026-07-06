@@ -6,6 +6,7 @@ import { authServices } from "./auth.service";
 import { prisma } from "../../../shared/prisma";
 import * as bcrypt from "bcrypt";
 import ApiError from "../../errors/ApiError";
+import config from "../../../config";
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -13,9 +14,11 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
 
   const { refreshToken, accessToken, needsPasswordChange } = result;
 
+  const isProduction = config.env === "production";
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: false,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   });
   sendResponse(res, {
     success: true,
@@ -54,7 +57,7 @@ const changePassword = catchAsync(
       message: "Password Change Successfully",
       data: result,
     });
-  }
+  },
 );
 
 const forgotPassword = catchAsync(
@@ -67,7 +70,7 @@ const forgotPassword = catchAsync(
       message: "Reset link sender your email",
       data: result,
     });
-  }
+  },
 );
 
 const resetPassword = catchAsync(
@@ -81,7 +84,7 @@ const resetPassword = catchAsync(
       message: "Password is reset",
       data: result,
     });
-  }
+  },
 );
 
 export const authControllers = {

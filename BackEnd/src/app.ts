@@ -6,12 +6,26 @@ import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
 import cookieParser from "cookie-parser";
 import { appointmentServices } from "./app/modules/appointment/appointment.service";
 import cron from "node-cron";
+import config from "./config";
 const app: Application = express();
 
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
-}));
+const allowedOrigins = ["http://localhost:3000", config.frontendUrl].filter(
+  Boolean,
+) as string[];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow non-browser requests (e.g. curl, server-to-server) with no origin
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 // parser
 app.use(express.json());
@@ -21,16 +35,13 @@ app.use(cookieParser());
 // app.use("/api/v1/users", userRoutes);
 // app.use("/api/v1/admins", adminRoutes);
 
-
-cron.schedule('* * * * *', async () => {
+cron.schedule("* * * * *", async () => {
   try {
     await appointmentServices.cancelUnpaidAppointments();
   } catch (error) {
-    console.error('[CRON] Failed to cancel unpaid appointments:', error);
+    console.error("[CRON] Failed to cancel unpaid appointments:", error);
   }
 });
-
-
 
 app.use("/api/v1", router);
 

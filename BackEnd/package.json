@@ -7,7 +7,13 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+    "start": "node dist/server.js",
+    "postinstall": "prisma generate",
+    "heroku-postbuild": "npm run build",
     "seed": "ts-node-dev --respawn --transpile-only src/seed.ts"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "author": "",
   "license": "ISC",
